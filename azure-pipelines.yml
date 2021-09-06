@@ -1,0 +1,41 @@
+# Go
+# Build your Go project.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  GOBIN:  '$(GOPATH)/bin' # Go binaries path
+  # GOROOT: '/usr/local/go1.16' # Go installation path
+  GOPATH: '$(system.defaultWorkingDirectory)' # Go workspace path
+  # modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+
+steps:
+- task: GoTool@0
+  inputs:
+    version: '1.16.7'
+- script: |
+    mkdir $(system.defaultWorkingDirectory)/bin
+    mkdir $(system.defaultWorkingDirectory)/pkg
+    cd $(system.defaultWorkingDirectory)/src/AzureGolang
+    go install mvdan.cc/garble@latest
+    pwd
+    ls
+    gorble
+  displayName: 'Set up the Go workspace'
+
+# - script: |
+#     go version
+#     go get -v -t -d ./...
+#     if [ -f Gopkg.toml ]; then
+#         curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+#         dep ensure
+#     fi
+#     go build -v .
+#   workingDirectory: '$(modulePath)'
+#   displayName: 'Get dependencies, then build'
